@@ -12,12 +12,10 @@ workflows:
     integrations:
       app_store_connect: AcePilotASC
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.acepilotacademy.app
       vars:
         XCODE_WORKSPACE: "ios/App/App.xcworkspace"
         XCODE_SCHEME: "App"
+        BUNDLE_ID: "com.acepilotacademy.app"
       node: 20
       xcode: latest
       cocoapods: default
@@ -31,8 +29,12 @@ workflows:
       - name: Install CocoaPods
         script: |
           cd ios/App && pod install
-      - name: Apply App Store signing profiles
-        script: xcode-project use-profiles
+      - name: Set up code signing (auto-create cert + profile via API key)
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+          keychain add-certificates
+          xcode-project use-profiles
       - name: Build signed IPA
         script: |
           xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
