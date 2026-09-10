@@ -1,7 +1,7 @@
 # Cloud build pipeline for Ace Pilot Academy iOS.
 # Runs on a cloud Mac (Codemagic): builds + signs the app and uploads it to App Store Connect.
 # In Codemagic you must: (1) connect this repo, (2) add your App Store Connect API key as an
-#   integration named exactly: acepilot_asc_key
+#   integration named exactly: AcePilotASC
 # If your App Store Connect Bundle ID is not com.acepilotacademy.app, change it below AND in capacitor.config.json.
 
 workflows:
@@ -10,7 +10,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 60
     integrations:
-      app_store_connect: acepilot_asc_key
+      app_store_connect: AcePilotASC
     environment:
       ios_signing:
         distribution_type: app_store
